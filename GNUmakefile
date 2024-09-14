@@ -22,7 +22,6 @@ endif
 		docker run --rm --init -i \
 			$(DEBUGGING) \
 			$(TAG) \
-			./md2pdf.sh \
 			> $@
 
 build:

@@ -186,7 +186,8 @@ Any feedback, assistance or code contributions welcome.
 
 # Licence
 
-I hereby release the parts of this project I have written freely under [Creative Commons CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/?ref=chooser-v1), but this clearly does not apply for any of the sub-components it uses nor the fonts in the `assets` folder which are released under their own licenses: [OFL](https://github.com/google/fonts/blob/main/LICENSE) and the GUST/LPPL license as appropriate.
+I hereby release the parts of this project I have written freely under [Creative Commons CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/?ref=chooser-v1).  Attribution and code contributions would be nice though.
 
-Attribution and code contributions would be nice though.
+This clearly does not apply for the third-party sub-components it uses or the fonts in the `assets` folder which are released under their own licences: [OFL](https://github.com/google/fonts/blob/main/LICENSE) and the GUST/LPPL licence as appropriate.
 
+I've included the fonts (and their licences) in this package purely for performance and simplicity: otherwise they either need to be downloaded on each invocation, or cached somehow between Docker runs, leaving junk on the host machine. I hope that's okay within the terms of those licences.
