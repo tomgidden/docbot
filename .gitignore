@@ -1,0 +1,13 @@
+/tmp
+._*
+.#*
+*.bak
+*.old
+*.md
+*.pdf
+!README.md
+
+# Note, the PDF wouldn't usually be included, but as it's uniquely part of
+# pdf generation instruction, it's included as example.
+!README.pdf
+

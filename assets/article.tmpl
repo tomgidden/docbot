@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   <title>$title$</title>
-  <link rel="stylesheet" href="../css/print.css">
+  <link rel="stylesheet" href="../assets/print.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
-<body class="$extraclass$">
+<body class="$docbot_features$">
   <article>
     <header id="pageHeader">$title$</header>
-    <footer id="pageFooter">$if(copyright)$© $year$, $copyright$$endif$</footer>
+    <footer id="pageFooter">
+      $if(copyright)$<span>© $year$, $copyright$</span>$endif$
+      $if(footer)$<span>$footer$</span>$endif$
+      $if(revision)$<span>$revision$</span>$endif$
+    </footer>
     <title>$title$</title>
 
     <hgroup>
@@ -20,7 +24,7 @@
       $endif$
 
       $for(authors)$
-        <address>$if(authors.name)$$authors.name$$elseif(authors.firstname)$$if(authors.surname)$$authors.firstname$ $authors.surname$$endif$$endif$$if(authors.affiliation)$<affiliation>$authors.affiliation$</affiliation>$endif$$if(authors.email)$<div class="mailto"><a href="mailto:$authors.email$">&lt;$authors.email$&gt;</a></div>$endif$</address>
+        <address>$if(authors.name)$$authors.name$$elseif(authors.firstname)$$if(authors.surname)$$authors.firstname$ $authors.surname$$endif$$endif$$if(authors.affiliation)$<affiliation>$authors.affiliation$</affiliation>$endif$$if(authors.email)$&nbsp;<span class="mailto"><a href="mailto:$authors.email$">&lt;$authors.email$&gt;</a></span>$endif$</address>
       $endfor$
 
       $if(project)$
@@ -38,6 +42,11 @@
         $if(date.year)$$date.year$$endif$
       </time>
       $endif$
+
+      $if(revision)$
+      <div class="revision">$revision$</div>
+      $endif$
+
     </hgroup>
 
     $for(include-before)$

@@ -4,6 +4,7 @@
 html {
   --S: 12pt;
   --S2: 24pt;
+  --S1-75: 21pt;
   --S1-5: 18pt;
   --S1-25: 15pt;
   --S0-85: 10pt;
@@ -85,7 +86,7 @@ pre, code {
   font-family: "Noto Sans Mono Variable";
   /* font-variation-settings: "wdth" 100; */
   /* font-weight: 400; */
-  font-size: var(--S0-85);
+  font-size: 0.85em;
 }
 
 .strong_monospace code,
@@ -116,6 +117,15 @@ pre, code {
   padding-right: 0.125em;
 }
 
+/* Pandoc nests <pre><code>...</code></pre> to do ``` blocks, so we need to undo the padding. */
+.shade_monospace pre code,
+.shade_code pre code {
+  margin:0;
+  padding:0;
+  outline: none;
+  background-color: none;
+  border-radius: none;
+}
 
 header,footer {
   display: none;
@@ -143,9 +153,7 @@ h1,h2,h3,h4,h5,h6 {
 body {
   margin: 0;
   padding: 0;
-}
 
-body {
   font-style: normal;
   text-rendering: optimizeLegibility;
   text-wrap: pretty;
@@ -159,7 +167,6 @@ body {
   line-height: var(--L);
 }
 
-
 @page {
   size: A4;
   margin: 1in 0.75in;
@@ -168,18 +175,22 @@ body {
     content: string("");
     height: var(--L2);
     margin-top: var(--L);
-    background-image: url(../css/logo.svg);
+    background-image: url(../assets/logo.svg);
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: auto var(--L);
   }
 
   @bottom-left {
+    font-family: "Open Sans Variable";
+    font-weight: 600;
     font-size: var(--S0-85);
     content: element(pageFooter);
   }
 
   @bottom-right {
+    font-family: "Open Sans Variable";
+    font-weight: 600;
     font-size: var(--S0-85);
     content: counter(page);
   }
@@ -206,9 +217,7 @@ h5+h6 {
 }
 
 
-h1,
-h2,
-h3 {
+h1,h2,h3,h4,h5,h6 {
   margin-left: var(--II);
 }
 
@@ -226,29 +235,35 @@ main {
   color: black;
 }
 
+time { display: block; }
+div.revision { display: block; }
+
 .wide main,
 .wide main h1,
 .wide main h2,
-.wide main h3 {
-  margin-left: 0;
+.wide main h3,
+.wide main h4,
+.wide main h5,
+.wide main h6 {
+    margin-left: 0;
 }
 
-.wide main pre {
-  margin-left: var(--L2);
-}
+main pre {  margin-left: var(--L2); }
+.wide main pre {  margin-left: 0; }
+.wide_pre main pre {  margin-left: 0; }
+.wide.wide_pre main pre {  margin-left: var(--L2); }
 
-.wide_pre main pre {
-  margin-left: 0;
+footer span::after {
+  content: "   |  ";
 }
-
-.wide.wide_pre main pre {
-  margin-left: 0;
+footer span:last-child::after {
+  content: "";
 }
 
 article>hgroup {
   line-height: var(--L);
   margin-left: var(--I);
-  margin-bottom: var(--L3);
+  margin-bottom: var(--L);
 }
 
 article>hgroup>h1 {
@@ -265,35 +280,39 @@ article>hgroup>address affiliation::before {
 
 
 h1 {
-  font-size: var(--S2);
+  font-size: var(--S1-75);
   line-height: var(--L2);
+  font-weight: 800;
 }
 
 h2 {
-  font-size: var(--S2);
+  font-size: var(--S1-75);
   line-height: var(--L2);
+  font-weight: 600;
 }
 
 h3 {
   font-size: var(--S1-5);
   line-height: var(--L2);
+  font-weight: 600;
 }
 
 h4 {
-  font-size: var(--S1-5);
+  font-size: var(--S1-25);
   line-height: var(--L2);
+  font-weight: 600;
 }
 
 h5 {
-  font-size: var(--S1-25);
-  line-height: var(--L2);
-  font-weight: normal;
+  font-size: var(--S1);
+  line-height: var(--L);
+  font-weight: 600;
 }
 
 h6 {
-  font-size: var(--S1-25);
+  font-size: var(--S1);
   line-height: var(--L);
-  font-weight: normal;
+  font-weight: 500;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -307,7 +326,7 @@ h1,h2,h3,h4,h5,h6 {
     widows: 3;
   }
 
-  h2,h3,h4,h5,h6 {
+  h1,h2,h3,h4,h5,h6 {
     page-break-after: avoid;
   }
 }
@@ -411,7 +430,8 @@ svg {
 blockquote {
   padding-left: var(--L2);
   border-left: 2px solid #e6e6e6;
-  color: #606060;
+  font-style: italic;
+  /* color: #606060; */
 }
 
 .sourceCode {
@@ -452,11 +472,6 @@ th {
 
 td {
   padding: 0.125rem 0.5rem 0.25rem 0.5rem;
-}
-
-header {
-  margin-bottom: 4rem;
-  text-align: center;
 }
 
 #TOC li {

@@ -30,7 +30,7 @@ USER node
 
 WORKDIR /home/node
 
-COPY css css
+COPY assets assets
 
 COPY --chmod=755 md2pdf.sh md2pdf.sh
 
