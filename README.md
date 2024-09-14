@@ -4,16 +4,9 @@ date:
   year: 2024
 revision: v.1.0
 authors:
-- firstname: Tom
-  surname: Gidden
+- name: Tom Gidden
   email: tom@gidden.net
-docbot_features:
-  - no_wide
-  - no_wide_pre
-  - shade_monospace
-  - strong_monospace
-  - narrow_monospace
-  - justify
+docbot_features: shade_monospace narrow_monospace justify
 ...
 
 # _docbot_, a Markdown to PDF converter
@@ -23,6 +16,7 @@ docbot_features:
 ## Introduction
 
 `docbot` is a Markdown-to-PDF converter using:
+
 - _[Docker](https://docker.com)_ - a containerization engine
 - _[Pandoc](https://pandoc.org)_ - a document format converter
 - _[PagedJS](https://pagedjs.org)_ - an library for paginating HTML
@@ -114,7 +108,7 @@ If this bothers you, you can include the YAML as a seperate file next to the Mar
 
 - `docbot_features` - [See below](#docbot_features)
 
-### Example metadata:
+### Example metadata
 
 ```yaml
 title: Set this or just let it use the first `#`
@@ -170,17 +164,17 @@ If there is a file `logo.svg` in the `assets` folder, it will be used in the top
 
 # TODO
 
-- *TOCs*
+- _TOCs_
 
-- *Better images*. You can put things in the `assets` folder that can then be referenced for use in `DEBUG=1`, and you can (presumably) use remote URL files.  However, there's no easy way to pass them into the container for processing at this time.  More thought needed.
+- _Better images_. You can put things in the `assets` folder that can then be referenced for use in `DEBUG=1`, and you can (presumably) use remote URL files.  However, there's no easy way to pass them into the container for processing at this time.  More thought needed.
 
-- *Improved layout*. This is still a work in progress.
+- _Improved layout_. This is still a work in progress.
 
-- *Themes*.  Multiple CSS options in `assets` that could be selected with the metadata.
+- _Themes_.  Multiple CSS options in `assets` that could be selected with the metadata.
 
-- *Comprehensive support for the format*
+- _Comprehensive support for the format_
 
-- *HTML*, *EPUB*, etc. Given the use of _Pandoc_ these should be very simple to support. I'm just an old fart that likes neat A4 documents even if I never actually print them out.
+- _HTML_, _EPUB_, etc. Given the use of _Pandoc_ these should be very simple to support. I'm just an old fart that likes neat A4 documents even if I never actually print them out.
 
 Any feedback, assistance or code contributions welcome.
 

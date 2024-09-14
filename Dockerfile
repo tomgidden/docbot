@@ -32,6 +32,8 @@ WORKDIR /home/node
 
 COPY assets assets
 
+COPY README.md README.md
+
 COPY --chmod=755 md2pdf.sh md2pdf.sh
 
 CMD [ "/home/node/md2pdf.sh" ]
