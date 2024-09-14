@@ -7,7 +7,7 @@ date:
   year: 2024
 revision: v.1.0
 docbot_features: shade_monospace narrow_monospace justify
----
+...
 
 # _docbot_, a Markdown to PDF converter
 
