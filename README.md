@@ -72,7 +72,7 @@ make watch
 or the hard way:
 
 ```zsh
-docker run --rm --init -i -t -v `pwd`:/in tomgidden/pdfulator --watch
+docker run --rm --init -v $(pwd):/in tomgidden/pdfulator --watch
 ```
 
 ## Customisation and development
@@ -95,6 +95,12 @@ For example, a dev workflow might look like this:
 
 ```zsh
 DEBUG=1 make -B foo.pdf && open foo.pdf
+```
+
+or even better, just use watch mode:
+
+```zsh
+DEBUG=1 make watch
 ```
 
 Once you're happy with the style, you can build your own version of the image and use it anywhere without having to also transfer any assets.
@@ -218,4 +224,3 @@ I hereby release the parts of this project I have written freely under [Creative
 This clearly does not apply for the third-party sub-components it uses or the fonts in the `assets` folder which are released under their own licences: [OFL](https://github.com/google/fonts/blob/main/LICENSE) and the GUST/LPPL licence as appropriate.
 
 I've included the fonts (and their licences) in this package purely for performance and simplicity: otherwise they either need to be downloaded on each invocation, or cached somehow between Docker runs, leaving junk on the host machine. I hope that's okay within the terms of those licences.
-
