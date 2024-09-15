@@ -1,3 +1,4 @@
+# node used for PagedJS. Other major dependencies work well from packages.
 FROM node:22-slim
 
 RUN <<EOF
@@ -7,7 +8,7 @@ wget -q -O /etc/apt/trusted.gpg.d/linux_signing_key.asc https://dl-ssl.google.co
 echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 
 apt-get update
-apt-get install -y chromium bash pandoc
+apt-get install -y chromium bash pandoc inotify-tools zsh
 rm -rf /var/lib/apt/lists/*
 
 EOF
@@ -18,22 +19,27 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 RUN <<EOF
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export HOME=/home/node
+
 cd $HOME
 
 npm install -g --unsafe-perm=true --allow-root --ignore-scripts pagedjs-cli
 
 chown -R node:node /home/node
-
 EOF
+
+RUN <<EOF
+mkdir /in
+chown -R node:node /in
+EOF
+
+
+COPY assets /assets
+COPY README.md /assets/README.md
 
 USER node
 
-WORKDIR /home/node
+WORKDIR /
 
-COPY assets assets
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
-COPY README.md README.md
-
-COPY --chmod=755 md2pdf.sh md2pdf.sh
-
-CMD [ "/home/node/md2pdf.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]

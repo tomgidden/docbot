@@ -33,13 +33,13 @@ Pandoc = function (doc)
     end
   end
 
-  -- Convert docbot_features to a string to use as a HTML class string for CSS
-  if type(doc.meta.docbot_features) == "table" then
+  -- Convert pdfulator_features to a string to use as a HTML class string for CSS
+  if type(doc.meta.pdfulator_features) == "table" then
     local features = {}
-    for k, v in pairs(doc.meta.docbot_features) do
+    for k, v in pairs(doc.meta.pdfulator_features) do
       table.insert(features, pandoc.utils.stringify(v))
     end
-    doc.meta.docbot_features = table.concat(features, " ")
+    doc.meta.pdfulator_features = table.concat(features, " ")
   end
 
   return doc

@@ -1,4 +1,4 @@
-TAG=tomgidden/docbot
+TAG=tomgidden/pdfulator
 
 PDFS=$(patsubst %.md,%.pdf,$(wildcard *.md))
 
@@ -6,9 +6,9 @@ all: $(PDFS)
 
 ifdef DEBUG
 DEBUGGING= \
-	-v ./md2pdf.sh:/home/node/md2pdf.sh \
-	-v ./tmp:/home/node/doc \
-	-v ./assets:/home/node/assets
+	-v ./entrypoint.sh:/entrypoint.sh \
+	-v ./tmp:/tmp \
+	-v ./assets:/assets
 endif
 
 %.pdf: %.md
@@ -22,7 +22,14 @@ endif
 		docker run --rm --init -i \
 			$(DEBUGGING) \
 			$(TAG) \
-			> $@
+			- > $@
+
+watch:
+	docker run --rm --init -i -t \
+			$(DEBUGGING) \
+			-v ./:/in \
+			$(TAG) \
+			--watch
 
 build:
 	docker build -t $(TAG) .

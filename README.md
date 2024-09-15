@@ -5,17 +5,17 @@ authors:
 date:
   month: September
   year: 2024
-revision: v.1.0
-docbot_features: shade_monospace narrow_monospace justify
+revision: v.1.1
+pdfulator_features: shade_monospace narrow_monospace justify
 ...
 
-# _docbot_, a Markdown to PDF converter
+# _pdfulator_, a Markdown to PDF converter
 
-**https://github.com/tomgidden/docbot**
+**https://github.com/tomgidden/pdfulator**
 
 ## Introduction
 
-`docbot` is a Markdown-to-PDF converter using:
+`pdfulator` is a Markdown-to-PDF converter using:
 
 - _[Docker](https://docker.com)_ - a containerization engine
 - _[Pandoc](https://pandoc.org)_ - a document format converter
@@ -25,15 +25,14 @@ docbot_features: shade_monospace narrow_monospace justify
 
 It's not rocket science, but it's fiddly and usually not worth spending the time to assemble into a single utility.  That's what this is for.
 
-**Note:** This utility is unrelated to any other project called `docbot`; I created an unreleased utility using DocBook to PDF via XSL-FO 15 years earlier and previously in various forms back to 2000, and historically just called them `docbot` or similar.
 
 ## Installation
 
 The utility is packaged as a Docker image, as the dependencies are messy. You can pull down the image from Docker Hub:
 
 ```zsh
-docker pull tomgidden/docbot
-docker tag tomgidden/docbot docbot
+docker pull tomgidden/pdfulator
+docker tag tomgidden/pdfulator pdfulator
 ```
 
 or you can build it yourself. To build the image, run:
@@ -45,22 +44,40 @@ make build
 or manually:
 
 ```zsh
-docker build -t docbot .
+docker build -t pdfulator .
 ```
 
-Due to the inclusion of _Chromium_ the image footprint is over 1GB.
+Due to the inclusion of _Chromium_ the image footprint is large.
 
 ## Usage
 
-Given a Markdown file `foo.md`, run:
+Given a Markdown file `foo.md`, if you have the GNUmakefile in the current folder, you can run:
 
 ```zsh
 make foo.pdf
 ```
 
-That's it.
+or the hard way:
+
+```zsh
+docker run --rm --init -i tomgidden/pdfulator - < foo.md > foo.pdf
+```
+
+That's it. For continuous update whenever the Markdown changes, run:
+
+```zsh
+make watch
+```
+
+or the hard way:
+
+```zsh
+docker run --rm --init -i -t -v `pwd`:/in tomgidden/pdfulator --watch
+```
 
 ## Customisation and development
+
+### Immediate single-file mode
 
 ```zsh
 DEBUG=1 make foo.pdf
@@ -69,7 +86,7 @@ DEBUG=1 make foo.pdf
 That should do three things:
 
 - Use the current `assets` folder rather than the baked-in copy in the Docker image;
-- Use the current folder's `md2pdf.sh` rather than the baked-in copy in the Docker image;
+- Use the current folder's `entrypoint.sh` rather than the baked-in copy in the Docker image;
 - Preserve the intermediate `tmp` folder, containing the generated HTML file.
 
 As a result, you can tweak the CSS and other things in `assets` and quickly see the result without having to rebuild the Docker image.
@@ -90,9 +107,9 @@ The current CSS is a simple Humanist "white-paper" layout typical of my general 
 
 To support the top front-matter in a Markdown file, you can include a YAML block at the top of the file delineated by `---` and `...`; see this `README.yaml` file for an example.
 
-Unfortunately, other Markdown renderers (notably _[GitHub](https://github.com/tomgidden/docbot)_) may include this as garbled nonsense in their output.
+Unfortunately, other Markdown renderers (notably _[GitHub](https://github.com/tomgidden/pdfulator)_) may include this as garbled nonsense in their output.
 
-If this bothers you, you can include the YAML as a seperate file next to the Markdown instead, eg. `foo.md` and `foo.yaml`.
+If this bothers you, you can include the YAML as a separate file next to the Markdown instead, eg. `foo.md` and `foo.yaml`.
 
 ### Metadata entries
 
@@ -106,7 +123,7 @@ If this bothers you, you can include the YAML as a seperate file next to the Mar
 
 - `footer` - An optional text to be included in the page footer, added to the copyright if there is one.
 
-- `docbot_features` - [See below](#docbot_features)
+- `pdfulator_features` - [See below](#pdfulator_features)
 
 ### Example metadata
 
@@ -130,7 +147,7 @@ authors:
 copyright: Tom Gidden & Institute of Documentarian Affairs
 footer: Confidential
 
-docbot_features:
+pdfulator_features:
 - no_wide
 - no_wide_pre
 - shade_monospace
@@ -138,9 +155,9 @@ docbot_features:
 - narrow_monospace
 ```
 
-### `docbot_features`
+### `pdfulator_features`
 
-The document metadata [see above](#document-metadata) can include a `docbot_features` line or list that contains a few optional choices controlling formatting.  These can be left in but ignored (ie. disabled) by prefixing them with `no_`, or just removing them.
+The document metadata [see above](#document-metadata) can include a `pdfulator_features` line or list that contains a few optional choices controlling formatting.  These can be left in but ignored (ie. disabled) by prefixing them with `no_`, or just removing them.
 
 These include:
 
@@ -176,7 +193,23 @@ If there is a file `logo.svg` in the `assets` folder, it will be used in the top
 
 - _HTML_, _EPUB_, etc. Given the use of _Pandoc_ these should be very simple to support. I'm just an old fart that likes neat A4 documents even if I never actually print them out.
 
+- Testing of `--watch` and improvement on file globbing and so on.
+
 Any feedback, assistance or code contributions welcome.
+
+# History
+
+I've had various DocBook or Markdown to PDF toolchains using XSL-FO, Apache FOP and other tech since the late nineties, usually named "docbot" as I used them in web and email services, Slack bots, etc. 
+
+There are a lot of projects called `docbot` and a lot called `md2pdf`. None of them do exactly what I want, though. Decent pagination was served by the DocBook XSL sheets, but HTML-based ones have been lacking. Most still do. 
+
+ And using DocBook as an intermediary is a bad idea; while DocBook is richer than Markdown (and arguably a far better choice for software documentation) the element semantics aren't suitable for generic documents.
+
+[PagedJS](https://pagedjs.org) now seems to make the HTML route a good option, being a capable polyfill for the print features of CSS3, allowing for running headers and footers and so on.
+
+- v1.0: Released for a short time as "docbot"
+
+- v1.1: Renamed to "pdfulator" and refactored to give a basic "--watch" mode. This is still a work in progress.
 
 # Licence
 
@@ -185,3 +218,4 @@ I hereby release the parts of this project I have written freely under [Creative
 This clearly does not apply for the third-party sub-components it uses or the fonts in the `assets` folder which are released under their own licences: [OFL](https://github.com/google/fonts/blob/main/LICENSE) and the GUST/LPPL licence as appropriate.
 
 I've included the fonts (and their licences) in this package purely for performance and simplicity: otherwise they either need to be downloaded on each invocation, or cached somehow between Docker runs, leaving junk on the host machine. I hope that's okay within the terms of those licences.
+
