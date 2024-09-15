@@ -61,12 +61,12 @@ function process_file {
 
   # Block PDF file changes from triggering
   if [[ $MAINEXT == pdf ]]; then
-    return
+    return 0
   fi
 
   if [[ -s "$OUT" && $IN -ot $OUT ]]; then
     [ $OPT_V ] && echo "Skipping $IN (unchanged)"
-    return
+    return 0
   fi
 
   [ $OPT_V ] && echo "Processing $IN..."
@@ -92,7 +92,8 @@ function process_file {
 
 # Do an immediate run-through (not watched)
 function process_files_and_dirs {
-  
+  [ $OPT_V ] && echo "Processing files and directories..."
+
   # Loop through specified files
   if [ ${#FILES[@]} -gt 0 ]; then
     for IN in ${FILES[@]}; do
@@ -110,11 +111,12 @@ function process_files_and_dirs {
 # Watch for file changes and do conversions when detected
 function watch_files_and_dirs {
   [ $OPT_V ] && echo "Watching for file changes..."
+
   while true; do
 
     # Watch for changes to specified files
     if [ ${#FILES[@]} -gt 0 ]; then
-      inotifywait -e create,modify,close_write --format '%w%f%0' ${FILES[@]} |\
+      inotifywait -q -e create,modify,close_write --format '%w%f%0' ${FILES[@]} |\
         while IFS= read -r -d '' IN; do
           [ $OPT_V ] && echo "Processing specified file... $IN"
           process_file $IN $INDIR/${IN:t:r}.pdf
@@ -122,7 +124,7 @@ function watch_files_and_dirs {
             
     # Watch for changes to files in directories
     elif [ ${#DIRS[@]} -gt 0 ]; then
-      inotifywait -e create,modify,close_write,moved_to --includei '\.(md|yml|yaml)$' --no-newline --format '%w%f%0' ${DIRS[@]} |\
+      inotifywait -q -e create,modify,close_write,moved_to --includei '\.(md|yml|yaml)$' --no-newline --format '%w%f%0' ${DIRS[@]} |\
         while IFS= read -r -d '' IN; do
           [ $OPT_V ] && echo "Processing file... $IN"
           process_file $IN $INDIR/${IN:t:r}.pdf
