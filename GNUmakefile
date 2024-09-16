@@ -4,6 +4,10 @@ PDFS=$(patsubst %.md,%.pdf,$(wildcard *.md))
 
 EXTRA_DOCKER_OPTS?=
 
+ifdef THEME
+EXTRA_DOCKER_OPTS+=-v $(THEME):/theme
+endif
+
 all: $(PDFS)
 
 ifdef DEBUG
@@ -20,20 +24,10 @@ endif
 			echo "---" && cat $*.yml && echo "\n..." && cat $*.md,\
 			cat $*.md \
 		) \
-	)) | \
-		docker run --rm --init -i \
-			$(EXTRA_DOCKER_OPTS) \
-			$(DEBUGGING) \
-			$(TAG) \
-			- > $@
+	)) | docker run --rm --init -i $(EXTRA_DOCKER_OPTS) $(DEBUGGING) $(TAG) - > $@
 
 watch:
-	docker run --rm --init -i -t \
-			$(EXTRA_DOCKER_OPTS) \
-			$(DEBUGGING) \
-			-v ./:/in \
-			$(TAG) \
-			--watch
+	docker run --rm --init -it $(EXTRA_DOCKER_OPTS) $(DEBUGGING) -v ./:/in $(TAG) --watch
 
 build:
 	docker build -t $(TAG) .

@@ -52,15 +52,15 @@ function convert_to_pdf {
     -o $SUBWORKDIR/$LEAF.html
     #    --shift-heading-level-by=-1 \
   
+  STYLES=$DEFAULTS/print.css
+  # [[ -f $THEME/print.css ]] && STYLES={$DEFAULTS,$THEME}/print.css
+
   # Convert HTML to PDF
   pagedjs-cli \
-    -s A4 \
-    -w 210mm \
-    -h 297mm \
-    --style $DEFAULTS/print.css \
-    --style $THEME/print.css \
     -i "$SUBWORKDIR/$LEAF.html" \
     -o "$OUT"
+
+  return 0
 }
 
 
@@ -97,8 +97,13 @@ function process_file {
   # Do the conversion
   convert_to_pdf $SUBWORKDIR $LEAF $OUT
 
+
   # Clean up
+  set +e
   [ $OPT_D ] || rm -rf $SUBWORKDIR
+  set -e
+
+  return 0
 }
 
 
@@ -118,6 +123,8 @@ function process_files_and_dirs {
       process_file $IN $INDIR/${IN:t:r}.pdf
     done
   fi
+
+  return 0
 }
 
 # Watch for file changes and do conversions when detected
@@ -143,6 +150,8 @@ function watch_files_and_dirs {
         done
     fi
   done
+
+  return 0
 }
 
 
@@ -169,9 +178,10 @@ for IN in "$@"; do
     cat $SUBWORKDIR/file.pdf
 
     # Clean up
+    set +e
     [ $OPT_D ] && rm -rf $SUBWORKDIR
 
-    exit
+    exit 0
   fi
 done
 
