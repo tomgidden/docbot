@@ -33,8 +33,9 @@ chown -R node:node /in
 EOF
 
 
-COPY assets /assets
-COPY README.md /assets/README.md
+COPY defaults /defaults
+COPY theme /theme
+COPY README.md /defaults/README.md
 
 USER node
 

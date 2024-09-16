@@ -1,6 +1,7 @@
 #!/bin/zsh
 
-ASSETS=/assets
+DEFAULTS=/defaults
+THEME=/theme
 WORKDIR=/tmp
 INDIR=/in
   
@@ -30,12 +31,22 @@ function convert_to_pdf {
   FORMAT=commonmark_x-raw_html+task_lists+definition_lists
     #+blank_before_header+space_in_atx_header
   
+  LUAFILTER_DEFAULTS=""
+  LUAFILTER_THEME=""
+  [[ -f $DEFAULTS/metadata.lua ]] && LUAFILTER_DEFAULTS=--lua-filter=$DEFAULTS/metadata.lua
+  [[ -f $THEME/metadata.lua ]] && LUAFILTER_THEME=--lua-filter=$THEME/metadata.lua
+
+  TEMPLATE=$DEFAULTS/article.tmpl
+  [[ -f $THEME/article.tmpl ]] && TEMPLATE=$THEME/article.tmpl
+
+
   # Convert to HTML5
   pandoc \
     $SUBWORKDIR/* \
     -f $FORMAT \
-    --lua-filter=$ASSETS/metadata.lua \
-    --template=$ASSETS/article.tmpl \
+    $LUAFILTER_DEFAULTS \
+    $LUAFILTER_THEME \
+    --template=$TEMPLATE \
     --no-highlight \
     -t html5 \
     -o $SUBWORKDIR/$LEAF.html
@@ -46,7 +57,8 @@ function convert_to_pdf {
     -s A4 \
     -w 210mm \
     -h 297mm \
-    --style $ASSETS/print.css \
+    --style $DEFAULTS/print.css \
+    --style $THEME/print.css \
     -i "$SUBWORKDIR/$LEAF.html" \
     -o "$OUT"
 }

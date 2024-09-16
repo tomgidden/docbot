@@ -5,7 +5,7 @@ authors:
 date:
   month: September
   year: 2024
-revision: v.1.1
+revision: v.1.1.1
 pdfulator_features: shade_monospace narrow_monospace justify
 ...
 
@@ -85,11 +85,11 @@ DEBUG=1 make foo.pdf
 
 That should do three things:
 
-- Use the current `assets` folder rather than the baked-in copy in the Docker image;
+- Use the current `defaults` folder rather than the baked-in copy in the Docker image;
 - Use the current folder's `entrypoint.sh` rather than the baked-in copy in the Docker image;
 - Preserve the intermediate `tmp` folder, containing the generated HTML file.
 
-As a result, you can tweak the CSS and other things in `assets` and quickly see the result without having to rebuild the Docker image.
+As a result, you can tweak the CSS and other things in `defaults` and quickly see the result without having to rebuild the Docker image.
 
 For example, a dev workflow might look like this:
 
@@ -108,6 +108,13 @@ Once you're happy with the style, you can build your own version of the image an
 ## Styling
 
 The current CSS is a simple Humanist "white-paper" layout typical of my general tastes. I was influenced in my youth by the original [1995 Java™ white paper](https://web.archive.org/web/20240524160851/https://www.stroustrup.com/1995_Java_whitepaper.pdf)s and other documentation from Sun, and this is somewhat simplified version. It's very rough-and-ready, but it does enough for me right now.  I have been wondering if it's worth having multiple themes somehow.
+
+You can override the styling by adding a `theme` folder with custom stylesheets, fonts and other assets. This should override the ones in `defaults`:
+
+```zsh
+EXTRA_DOCKER_OPTS="-v $(pwd)/my_css:/theme" make foo.pdf
+```
+
 
 ## Document metadata
 
@@ -183,23 +190,25 @@ These include:
 
 ## Adding a logo
 
-If there is a file `logo.svg` in the `assets` folder, it will be used in the top-right header box.
+If there is a file `logo.svg` in the `theme` folder, it will be used in the top-right header box.
 
 # TODO
 
-- _TOCs_
+[ ] _TOCs_
 
-- _Better images_. You can put things in the `assets` folder that can then be referenced for use in `DEBUG=1`, and you can (presumably) use remote URL files.  However, there's no easy way to pass them into the container for processing at this time.  More thought needed.
+[ ] _Better images_. You can put things in the `theme` folder that can then be referenced for use in `DEBUG=1`, and you can (presumably) use remote URL files.  However, there's no easy way to pass them into the container for processing at this time.  More thought needed.
 
-- _Improved layout_. This is still a work in progress.
+[ ] _Improved layout_. This is still a work in progress.
 
-- _Themes_.  Multiple CSS options in `assets` that could be selected with the metadata.
+[X] _Themes_.  
 
-- _Comprehensive support for the format_
+[ ] _Built-in themes_. Instead of having to make a theme, have some premade ones available with settings in metadata.
 
-- _HTML_, _EPUB_, etc. Given the use of _Pandoc_ these should be very simple to support. I'm just an old fart that likes neat A4 documents even if I never actually print them out.
+[ ] _Comprehensive support for the format_
 
-- Testing of `--watch` and improvement on file globbing and so on.
+[ ] _HTML_, _EPUB_, etc. Given the use of _Pandoc_ these should be very simple to support. I'm just an old fart that likes neat A4 documents even if I never actually print them out.
+
+[ ] Testing of `--watch` and improvement on file globbing and so on.
 
 Any feedback, assistance or code contributions welcome.
 
@@ -216,6 +225,8 @@ There are a lot of projects called `docbot` and a lot called `md2pdf`. None of t
 - v1.0: Released for a short time as "docbot"
 
 - v1.1: Renamed to "pdfulator" and refactored to give a basic "--watch" mode. This is still a work in progress.
+
+- v1.1.1: Themes
 
 # Licence
 

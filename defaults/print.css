@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); */
+/* @import url(/defaults/'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); */
 /* TeX Gyre Pagella, an open-source Palatino lookalike, is installed by `fonts-texgyre` APT package in the Dockerfile */
 
 html {
@@ -44,42 +44,42 @@ article>hgroup>h1 {
 @font-face {
   font-family: 'TeX Gyre Pagella';
   font-display: swap;
-  src: url(texgyrepagella-regular.otf) format('opentype');
+  src: url(/defaults/texgyrepagella-regular.otf) format('opentype');
 }
 @font-face {
   font-family: 'TeX Gyre Pagella';
   font-display: swap;
   font-style: italic;
-  src: url(texgyrepagella-italic.otf) format('opentype');
+  src: url(/defaults/texgyrepagella-italic.otf) format('opentype');
 }
 @font-face {
   font-family: 'TeX Gyre Pagella';
   font-display: swap;
   font-weight: 600;
-  src: url(texgyrepagella-bold.otf) format('opentype');
+  src: url(/defaults/texgyrepagella-bold.otf) format('opentype');
 }
 @font-face {
   font-family: 'TeX Gyre Pagella';
   font-display: swap;
   font-style: italic;
   font-weight: 600;
-  src: url(texgyrepagella-bolditalic.otf) format('opentype');
+  src: url(/defaults/texgyrepagella-bolditalic.otf) format('opentype');
 }
 @font-face {
   font-family: 'Noto Sans Mono Variable';
   font-display: swap;
-  src: url(NotoSansMono-VariableFont_wdth,wght.ttf) format('truetype');
+  src: url(/defaults/NotoSansMono-VariableFont_wdth,wght.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Open Sans Variable';
   font-display: swap;
-  src: url(OpenSans-VariableFont_wdth,wght.ttf) format('truetype');
+  src: url(/defaults/OpenSans-VariableFont_wdth,wght.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Open Sans Variable';
   font-style: italic;
   font-display: swap;
-  src: url(OpenSans-Italic-VariableFont_wdth,wght.ttf) format('truetype');
+  src: url(/defaults/OpenSans-Italic-VariableFont_wdth,wght.ttf) format('truetype');
 }
 
 pre, code {
@@ -175,7 +175,7 @@ body {
     content: string("");
     height: var(--L2);
     margin-top: var(--L);
-    background-image: url(../assets/logo.svg);
+    background-image: url(/theme/logo.svg);
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: auto var(--L);

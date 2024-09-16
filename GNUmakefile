@@ -2,13 +2,15 @@ TAG=tomgidden/pdfulator
 
 PDFS=$(patsubst %.md,%.pdf,$(wildcard *.md))
 
+EXTRA_DOCKER_OPTS?=
+
 all: $(PDFS)
 
 ifdef DEBUG
 DEBUGGING= \
 	-v ./entrypoint.sh:/entrypoint.sh \
 	-v ./tmp:/tmp \
-	-v ./assets:/assets
+	-v ./defaults:/defaults
 endif
 
 %.pdf: %.md
@@ -20,12 +22,14 @@ endif
 		) \
 	)) | \
 		docker run --rm --init -i \
+			$(EXTRA_DOCKER_OPTS) \
 			$(DEBUGGING) \
 			$(TAG) \
 			- > $@
 
 watch:
 	docker run --rm --init -i -t \
+			$(EXTRA_DOCKER_OPTS) \
 			$(DEBUGGING) \
 			-v ./:/in \
 			$(TAG) \
