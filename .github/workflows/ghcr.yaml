@@ -41,8 +41,8 @@ jobs:
             maintainer=tom@gidden.net
             org.opencontainers.image.vendor=Tom Gidden <tom@gidden.net>
           images: |
-            ghcr.io/${{ env.GITHUB_REPOSITORY }}
-            docker.io/${{ env.GITHUB_REPOSITORY }}
+            ghcr.io/${{ github.repository }}
+            docker.io/${{ github.repository }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -77,13 +77,13 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ghcr.io/${{ env.GITHUB_REPOSITORY }}
+          subject-name: ghcr.io/${{ github.repository }}
           subject-digest: ${{ steps.bake.outputs.digest }}
           push-to-registry: true
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: docker.io/${{ env.GITHUB_REPOSITORY }}
+          subject-name: docker.io/${{ github.repository }}
           subject-digest: ${{ steps.bake.outputs.digest }}
           push-to-registry: true
