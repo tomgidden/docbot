@@ -62,7 +62,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & bake
-        uses: docker/bake-action@5
+        uses: docker/bake-action@v5
         with:
           source: "${{ github.server_url }}/${{ github.repository }}.git#${{ github.ref }}"
           push: true
