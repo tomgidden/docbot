@@ -129,7 +129,7 @@ jobs:
         with:
           source: "${{ github.server_url }}/${{ github.repository }}.git#${{ github.ref }}"
           files: |
-            ./docker-bake.hcl
+            .github/workflows/docker-bake.hcl
             /tmp/bake-meta.json
           targets: image
           set: |
