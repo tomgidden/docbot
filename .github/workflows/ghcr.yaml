@@ -40,9 +40,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          labels: |
-            maintainer=tom@gidden.net
-            org.opencontainers.image.vendor=Tom Gidden <tom@gidden.net>
           images: |
             ghcr.io/${{ github.repository }}
             docker.io/${{ github.repository }}
@@ -50,8 +47,8 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=sha
-            # type=ref,event=branch
-            # type=ref,event=pr
+      # type=ref,event=branch
+      # type=ref,event=pr
 
       # - name: Log in to the Container registry
       #   uses: docker/login-action@v3
@@ -67,7 +64,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build & bake
+      - name: Build & push multi-platform packages to Docker.io and GHCR.io.
         id: bake
         uses: docker/bake-action@v5
         with:

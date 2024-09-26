@@ -2,6 +2,10 @@
 # Other major dependencies work well from packages.
 FROM node:slim
 
+LABEL maintainer=tom@gidden.net
+LABEL org.opencontainers.image.vendor=Tom Gidden <tom@gidden.net>
+
+
 # Install Chromium, Pandoc and a couple of developer conveniences.
 # Remove package files afterwards to minimise footprint
 RUN <<EOF
