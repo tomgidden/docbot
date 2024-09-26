@@ -87,7 +87,7 @@ That should do three things:
 
 - Use the current `defaults` folder rather than the baked-in copy in the Docker image;
 - Use the current folder's `entrypoint.sh` rather than the baked-in copy in the Docker image;
-- Preserve the intermediate `tmp` folder, containing the generated HTML file.
+- Preserve the intermediate `work` folder, containing the generated HTML file.
 
 As a result, you can tweak the CSS and other things in `defaults` and quickly see the result without having to rebuild the Docker image.
 
@@ -113,6 +113,23 @@ You can override the styling by adding a `theme` folder with custom stylesheets,
 
 ```zsh
 EXTRA_DOCKER_OPTS="-v $(pwd)/my_css:/theme" make foo.pdf
+```
+
+### Logo
+
+If the theme folder contains a file called `logo.svg`, it should appear in the top-right.  However, to customise the positioning and style, you'll have to use a little custom CSS.  As there's a little quirk somewhere, you have to add a little content, even though it's specified in the main stylesheet:
+
+```css
+@page {
+  @top-right {
+    content: string("");                    /* seemingly important*/
+    background-image: url(/theme/logo.svg);
+    background-size: 108pt auto;            /* here's how to size the image */
+    /* control `height`, `margin-top` and `margin-right` appropriately, but check 
+     * it doesn't crash into content on page 2 onwards.
+     */
+  }
+}
 ```
 
 
@@ -194,13 +211,13 @@ If there is a file `logo.svg` in the `theme` folder, it will be used in the top-
 
 # TODO
 
+[X] _Themes_.  
+
 [ ] _TOCs_
 
 [ ] _Better images_. You can put things in the `theme` folder that can then be referenced for use in `DEBUG=1`, and you can (presumably) use remote URL files.  However, there's no easy way to pass them into the container for processing at this time.  More thought needed.
 
 [ ] _Improved layout_. This is still a work in progress.
-
-[X] _Themes_.  
 
 [ ] _Built-in themes_. Instead of having to make a theme, have some premade ones available with settings in metadata.
 
@@ -227,6 +244,8 @@ There are a lot of projects called `docbot` and a lot called `md2pdf`. None of t
 - v1.1: Renamed to "pdfulator" and refactored to give a basic "--watch" mode. This is still a work in progress.
 
 - v1.1.1: Themes
+
+- v1.1.2: Preservation of work folder (now in `/work`), and minor styling for logos
 
 # Licence
 

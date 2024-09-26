@@ -173,11 +173,11 @@ body {
 
   @top-right {
     content: string("");
-    height: var(--L2);
+    height: 72pt;
     margin-top: var(--L);
     background-image: url(/theme/logo.svg);
     background-repeat: no-repeat;
-    background-position: right bottom;
+    background-position: right top;
     background-size: auto var(--L);
   }
 

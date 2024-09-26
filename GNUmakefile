@@ -11,9 +11,10 @@ endif
 all: $(PDFS)
 
 ifdef DEBUG
+SWITCHES+= -d
 DEBUGGING= \
 	-v ./entrypoint.sh:/entrypoint.sh \
-	-v ./tmp:/tmp \
+	-v ./work:/work \
 	-v ./defaults:/defaults
 endif
 
@@ -24,10 +25,10 @@ endif
 			echo "---" && cat $*.yml && echo "\n..." && cat $*.md,\
 			cat $*.md \
 		) \
-	)) | docker run --rm --init -i $(EXTRA_DOCKER_OPTS) $(DEBUGGING) $(TAG) - > $@
+	)) | docker run --rm --init -i $(EXTRA_DOCKER_OPTS) $(DEBUGGING) $(TAG) $(SWITCHES) - > $@
 
 watch:
-	docker run --rm --init -it $(EXTRA_DOCKER_OPTS) $(DEBUGGING) -v ./:/in $(TAG) --watch
+	docker run --rm --init -it $(EXTRA_DOCKER_OPTS) $(DEBUGGING) -v ./:/in $(TAG) $(SWITCHES) --watch
 
 build:
 	docker build -t $(TAG) .

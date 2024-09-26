@@ -29,7 +29,8 @@ EOF
 
 RUN <<EOF
 mkdir /in
-chown -R node:node /in
+mkdir /work
+chown -R node:node /in /work
 EOF
 
 

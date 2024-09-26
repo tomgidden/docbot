@@ -2,7 +2,7 @@
 
 DEFAULTS=/defaults
 THEME=/theme
-WORKDIR=/tmp
+WORKDIR=/work
 INDIR=/in
   
 mkdir -p $WORKDIR $INDIR
@@ -51,9 +51,6 @@ function convert_to_pdf {
     -t html5 \
     -o $SUBWORKDIR/$LEAF.html
     #    --shift-heading-level-by=-1 \
-  
-  STYLES=$DEFAULTS/print.css
-  # [[ -f $THEME/print.css ]] && STYLES={$DEFAULTS,$THEME}/print.css
 
   # Convert HTML to PDF
   pagedjs-cli \
@@ -62,7 +59,6 @@ function convert_to_pdf {
 
   return 0
 }
-
 
 # The main function to process a file
 function process_file {
@@ -84,7 +80,7 @@ function process_file {
   [ $OPT_V ] && echo "Processing $IN..."
 
   # Create a subdir in $WORKDIR with a random suffix using tempfile
-  SUBWORKDIR=$(mktemp -d $WORKDIR/process.$LEAF.`date +%Y%m%d%H%M%S`.XXXX)
+  SUBWORKDIR=$(mktemp -d $WORKDIR/pdfulator.$LEAF.`date +%Y%m%d%H%M%S`.XXXX)
   
   # Copy input files that are either the IN file or any that match 
   for f in ${IN:r}{,.md,.yaml,.yml}(.N); do
@@ -97,8 +93,7 @@ function process_file {
   # Do the conversion
   convert_to_pdf $SUBWORKDIR $LEAF $OUT
 
-
-  # Clean up
+  # If not debugging, clear up the work folder.
   set +e
   [ $OPT_D ] || rm -rf $SUBWORKDIR
   set -e
@@ -161,7 +156,7 @@ for IN in "$@"; do
 
   if [[ "-" == $IN ]]; then
     # Immediate mode!
-    SUBWORKDIR=$(mktemp -d $WORKDIR/process.`date +%Y%m%d%H%M%S`.XXXX)
+    SUBWORKDIR=$(mktemp -d $WORKDIR/pdfulator.`date +%Y%m%d%H%M%S`.XXXX)
 
     # Save the incoming file
     cat - > $SUBWORKDIR/file.md
@@ -179,8 +174,7 @@ for IN in "$@"; do
 
     # Clean up
     set +e
-    [ $OPT_D ] && rm -rf $SUBWORKDIR
-
+    [ $OPT_D ] || rm -rf $SUBWORKDIR
     exit 0
   fi
 done
