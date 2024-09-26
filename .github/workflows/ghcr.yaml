@@ -23,14 +23,15 @@ jobs:
       id-token: write
 
     steps:
+
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
         # Add support for more platforms with QEMU (optional)
         # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v3
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -70,8 +71,8 @@ jobs:
           push: true
           files: |
             .github/workflows/docker-bake.hcl
+            ${{ steps.meta.outputs.bake-file }}
           targets: build
-            # ${{ steps.meta.outputs.bake-file }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
