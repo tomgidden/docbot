@@ -120,6 +120,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: debug
+        run: ls -alR /tmp/bake-meta.json ./docker-bake.hcl .github/workflows
+
+      - name: debug
+        run: ls -alR /
+
       - name: Build
         id: bake
         uses: docker/bake-action@v5
