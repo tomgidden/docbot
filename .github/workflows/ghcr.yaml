@@ -28,18 +28,20 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
           labels: |
-            maintainer=tomgidden
-            org.opencontainers.image.title=PDFulator
-            org.opencontainers.image.description=Docker-based PDF generation from Markdown
-            org.opencontainers.image.vendor=Tom Gidden
+            maintainer=tom@gidden.net
+            org.opencontainers.image.vendor=Tom Gidden <tom@gidden.net>
           images: |
-            ghcr.io/${{ env.REGISTRY_IMAGE }}
-            docker.io/${{ env.REGISTRY_IMAGE }}
+            ghcr.io/${{ env.GITHUB_REPOSITORY }}
+            docker.io/${{ env.GITHUB_REPOSITORY }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -62,25 +64,25 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & bake
+        id: bake
         uses: docker/bake-action@v5
         with:
-          source: "${{ github.server_url }}/${{ github.repository }}.git#${{ github.ref }}"
           push: true
           files: |
             .github/workflows/docker-bake.hcl
-            ${{ steps.meta.outputs.bake-file }}
           targets: build
+            # ${{ steps.meta.outputs.bake-file }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ghcr.io/${{ env.REGISTRY_IMAGE }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-name: ghcr.io/${{ env.GITHUB_REPOSITORY }}
+          subject-digest: ${{ steps.bake.outputs.digest }}
           push-to-registry: true
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: docker.io/${{ env.REGISTRY_IMAGE }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-name: docker.io/${{ env.GITHUB_REPOSITORY }}
+          subject-digest: ${{ steps.bake.outputs.digest }}
           push-to-registry: true
