@@ -1,6 +1,9 @@
-# node used for PagedJS. Other major dependencies work well from packages.
-FROM node:22-slim
+# node used for PagedJS, as it's harder to install than everything else.
+# Other major dependencies work well from packages.
+FROM node:slim
 
+# Install Chromium, Pandoc and a couple of developer conveniences.
+# Remove package files afterwards to minimise footprint
 RUN <<EOF
 apt-get update
 apt-get install -y wget gnupg
@@ -10,12 +13,13 @@ echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/source
 apt-get update
 apt-get install -y chromium bash pandoc inotify-tools zsh
 rm -rf /var/lib/apt/lists/*
-
 EOF
 
+# We'll use our own chromium from the package
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
+# Setup Paged.js
 RUN <<EOF
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export HOME=/home/node
@@ -27,13 +31,14 @@ npm install -g --unsafe-perm=true --allow-root --ignore-scripts pagedjs-cli
 chown -R node:node /home/node
 EOF
 
+# Setup folders
 RUN <<EOF
 mkdir /in
 mkdir /work
 chown -R node:node /in /work
 EOF
 
-
+# Copy out-of-the-box assets
 COPY defaults /defaults
 COPY theme /theme
 COPY README.md /defaults/README.md
@@ -42,6 +47,6 @@ USER node
 
 WORKDIR /
 
+# Copy the main launch script
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
-
 ENTRYPOINT [ "/entrypoint.sh" ]
