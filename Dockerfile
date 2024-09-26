@@ -2,9 +2,12 @@
 # Other major dependencies work well from packages.
 FROM node:slim
 
-LABEL maintainer=tom@gidden.net
-LABEL org.opencontainers.image.vendor=Tom Gidden <tom@gidden.net>
-
+LABEL maintainer="tom@gidden.net"
+LABEL org.opencontainers.image.title="PDFulator"
+LABEL org.opencontainers.image.description="Markdown to PDF converter, using Pandoc, PagedJS and Chromium, packaged as a Docker image"
+LABEL org.opencontainers.image.authors="Tom Gidden <tom@gidden.net>"
+LABEL org.opencontainers.image.source="https://github.com/tomgidden/pdfulator"
+LABEL org.opencontainers.image.license="MIT"
 
 # Install Chromium, Pandoc and a couple of developer conveniences.
 # Remove package files afterwards to minimise footprint
